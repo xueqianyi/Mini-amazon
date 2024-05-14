@@ -1,5 +1,5 @@
 #  Mini-Amazon Project
-Welcome to Mini-Amazon, a miniature version of the popular Amazon marketplace designed to emulate key functionalities from both the seller and buyer sides. This platform is divided into several modules, each with specific features that support the overall operation of the e-commerce system. Below is an overview of the subsystems and their functionalities.
+Welcome to Mini-Amazon, a miniature version of the popular Amazon marketplace designed to emulate key functionalities from both the seller and buyer sides. This platform is divided into several modules, each with specific features that support the overall operation of the e-commerce system. **Mini-Amazon is built using Flask, a lightweight web framework for Python, and PostgreSQL, a robust open-source relational database system.** These technologies ensure that our platform is scalable, secure, and efficient. Below is an overview of the subsystems and their functionalities:
 
 [<img src="https://github.com/xueqianyi/Mini-amazon/assets/55613486/8d482e89-60fa-4a9b-8fa5-87a1223e848e" width="50%">](https://www.youtube.com/watch?v=0b6r3II_sNM "Now in Android: 55") 
 ## Main Features

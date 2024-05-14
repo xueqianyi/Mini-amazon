@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://formden.com/static/assets/demos/bootstrap-iso/bootstrap-iso/bootstrap-iso.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/example.css') }}">
+
+  <!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> -->
+  <title>Mini Amazon</title>
+  <style>
+    * {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .fa-star, .fa-star-half-alt, .far.fa-star {
+      color: #f3a843;
+    }
+
+    .review-card {
+      border-radius: 50px;
+      background: #ffffff;
+      box-shadow:  20px 20px 60px #e6e6e6,
+                   -20px -20px 60px #ffffff;
+    }
+    
+    .review-card:hover {
+      border-radius: 50px;
+      background: #ffffff;
+      box-shadow: inset 20px 20px 60px #e6e6e6,
+                  inset -20px -20px 60px #ffffff;
+    }
+    
+
+    .star-rating {
+      width: 70%;
+      color: gray;
+      font-size: 24px;
+      border-bottom: 0.4px solid rgba(194, 194, 194, 0.829);
+    }
+  
+    .star-rating span {
+        color: gold;
+    }
+
+    .navbar {
+      height: 90px;
+      background-color: #0f1111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    .navlogo {
+      height: 50px;
+      width: 100px;
+    }
+
+    .logo {
+      background-image: url(https://www.amazon.com/ref=nav_logo);
+      height: 50px;
+      width: 100%;
+      background-size: cover;
+    }
+
+    .border {
+      border: 2px solid transparent;
+      border-radius: 2px;
+    }
+
+    .border:hover {
+      border: 1.5px solid white;
+    }
+
+    .addfirst {
+      color: #cccccc;
+      font-size: 12px;
+      margin-left: 16px;
+      align-items: center;
+    }
+
+    .addsecond {
+      font-size: 14px;
+      margin-left: 3px;
+      font-weight: 700;
+      align-items: center;
+    }
+
+    .addicon {
+      display: flex;
+      align-items: center;
+    }
+
+    .border2:hover {
+      border: 1.5px solid white;
+      height: 50px;
+    }
+
+    .search1 {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+      background-color: rgb(255, 52, 52);
+      height: 40px;
+      width: 620px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .nav-search {
+      display: flex;
+      height: 40px;
+      width: 620px;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      text-align: center;
+      background-color: #ff8484;
+      margin-left: 15px;
+      border-radius: 4px;
+      justify-content: space-evenly;
+    }
+
+    .search-option1 {
+      background-color: #f3f3f3;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      width: 25%;
+      text-align: center;
+      border: none;
+    }
+
+    input {
+      width: 100%;
+      font-size: 1rem;
+      border: none;
+    }
+
+    .search-input {
+      border: none;
+    }
+
+    .search-icon {
+      width: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(238, 156, 4, 0.849);
+      font-size: 1.2rem;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      color: #0f1111;
+    }
+
+    .lanoption {
+      font-weight: bolder;
+      background: transparent;
+      color: white;
+      border: none;
+    }
+
+    .languageoption {
+      height: 50px;
+      width: 74px;
+      display: flex;
+      align-items: center;
+      padding-left: 6px;
+    }
+
+    .american {
+      background-image: url(Images/america.webp);
+      background-size: cover;
+      height: 15px;
+      width: 20px;
+    }
+
+    .hello {
+      position: relative;
+      top: 10px;
+      font-size: 14px;
+      margin-left: 4px;
+    }
+
+    .account-sign {
+      background-color: #0f1111;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      border: none;
+    }
+
+
+    .logout-text {
+      color: black;
+    }
+
+    .return {
+      font-size: 12px;
+    }
+
+    .order {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .cart i {
+      font-size: 30px;
+    }
+
+    .cart {
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .nav-search:hover {
+      border: 2px solid orange;
+    }
+
+    .second-nav {
+      height: 42px;
+      background-color: #222f3d;
+      align-items: center;
+      color: white;
+      justify-content: space-evenly;
+      display: flex;
+    }
+
+    .second-nav p {
+      display: inline;
+    }
+
+    .allicon {
+      padding-left: 8px;
+      align-items: center;
+      display: flex;
+      width: 58px;
+      height: 36px;
+    }
+
+    .list {
+      font-weight: 700;
+      margin: 2px;
+      font-size: 14px;
+    }
+
+    .panel-ops {
+      width: 70%;
+      font-size: 0.8rem;
+    }
+
+    .ptag {
+      margin-left: 15px;
+    }
+
+    .deals {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .main {
+      background-image: url(https://m.media-amazon.com/images/I/81KkrQWEHIL._SX3000_.jpg);
+      height: 400px;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .msg {
+      font-size: 14px;
+      background-color: #f5f6f6;
+      width: 80%;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .msg a {
+      color: #007185;
+      text-decoration: none;
+    }
+
+    .shop {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      background-color: #e2e7e6;
+    }
+
+    .box {
+      height: 400px;
+      width: 23%;
+      background-color: white;
+      padding: 20px 0px 15px;
+      margin: 8px;
+    }
+
+    .shop1 {
+      font-size: 16px;
+    }
+
+    .box1-img {
+      height: 300px;
+      background-size: cover;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .box1-content {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+
+    .shop1 p a {
+      text-decoration: none;
+      color: #007185;
+      font-size: 15px;
+    }
+
+    footer {
+      margin-top: 15px;
+    }
+
+    .firstpanel {
+      height: 50px;
+      background-color: #232F3E;
+      color: white;
+      font: 13px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
+
+    .secondpanel {
+      background-color: #333;
+      color: white;
+      height: 400px;
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    ul {
+      margin-top: 20px;
+    }
+
+    ul a {
+      display: block;
+      font-size: 14px;
+      margin-top: 15px;
+      color: #dddddd;
+    }
+
+    .thirdpanel {
+      background-color: #333;
+      color: white;
+      border-top: 0.5px solid #848688;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      background-image: url(https://i.pinimg.com/originals/47/b7/bd/47b7bdac4285ee24654ca7d68cf06351.png);
+      height: 30px;
+      width: 100%;
+      background-size: cover;
+      width: 100px;
+    }
+
+    .select-op {
+      margin-left: 55px;
+      display: flex;
+    }
+
+    .select-op select {
+      background: transparent;
+      color: #cccccc;
+      font-size: 13px;
+      text-decoration: none;
+      margin-left: 5px;
+      border: 1px solid #848688;
+      padding: 6px 18px 6px 8px;
+      border-radius: 3px;
+    }
+
+    .panel4 {
+      background-color: #333;
+      color: white;
+      height: 80px;
+      font-size: 12px;
+      text-align: center;
+      /*display: flex;
+  align-items: center;
+  justify-content: center;*/
+    }
+
+    .page {
+      text-align: center;
+      padding-top: 25px;
+    }
+
+    .page a {
+      text-decoration: none;
+      color: white;
+
+    }
+
+    .copyright {
+      margin-top: 5px;
+    }
+
+    .login-form {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 350px;
+      /* Adjust the width as needed */
+    }
+
+    .login-form .form-control {
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .login-form .btn {
+      border-radius: 20px;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      background-color: #198754;
+      /* Bootstrap's .btn-success background color */
+      border: none;
+    }
+
+    .login-form h2 {
+      color: #000;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .login-form p {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      padding: 1rem 0;
+      /* Increase padding for top and bottom */
+      /* If you want to make the footer taller, you can adjust the height property instead of padding */
+    }
+
+    .dropList {
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .dropList ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .dropList li {
+      display: inline-block;
+      position: relative;
+    }
+
+    .dropList li:hover ul {
+      display: block;
+    }
+
+    .dropList li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+    }
+
+    .dropList li ul li {
+      display: block;
+    }
+
+    .dropList li ul li a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      white-space: nowrap;
+    }
+
+    .dropList li ul li a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .dropList li img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .cart-text{
+      text-decoration: none; 
+    color: white !important; 
+    }
+  </style>
+</head>
+
+<body>
+
+  </nav>
+  <div class="navbar">
+    <div class="navlogo">
+      <div class="logo border">
+        <a href="{{ url_for('index.index') }}" style="display: block; width: 100%; height: 100%;"></a>
+      </div>
+    </div>
+    <div class="navadd border">
+      <p class="addfirst icon">Deliver to</p>
+      <div class="addicon">
+        <i class="fa-solid fa-location-dot icon"></i>
+        <p class="addsecond icon">Durham 27705</p>
+      </div>
+    </div>
+
+    <div class="nav-search">
+      <select name="category" class="search-option1" id="categorySelect">
+        <option value="All" class="search-option2" {% if request.args.get('category', 'All') == 'All' %}selected{% endif %}>All</option>
+        <option value="Electronics" class="search-option2" {% if request.args.get('category', '') == 'Electronics' %}selected{% endif %}>Electronics</option>
+        <option value="Books" class="search-option2" {% if request.args.get('category', '') == 'Books' %}selected{% endif %}>Books</option>
+        <option value="Clothing" class="search-option2" {% if request.args.get('category') == 'Clothing' %}selected{% endif %}>Clothing</option>
+        <option value="Household" class="search-option2" {% if request.args.get('category') == 'Household' %}selected{% endif %}>Household</option>
+        <option value="Toys" class="search-option2" {% if request.args.get('category') == 'Toys' %}selected{% endif %}>Toys</option>
+        <option value="Food" class="search-option2" {% if request.args.get('category') == 'Food' %}selected{% endif %}>Food</option>
+        <option value="Sports" class="search-option2" {% if request.args.get('category') == 'Sports' %}selected{% endif %}>Sports</option>
+        <option value="Beauty" class="search-option2" {% if request.args.get('category') == 'Beauty' %}selected{% endif %}>Beauty</option>
+        <option value="Health" class="search-option2" {% if request.args.get('category') == 'Health' %}selected{% endif %}>Health</option>
+        <option value="Jewelry" class="search-option2" {% if request.args.get('category') == 'Jewelry' %}selected{% endif %}>Jewelry</option>
+        <option value="Outdoor" class="search-option2" {% if request.args.get('category') == 'Outdoor' %}selected{% endif %}>Outdoor</option>
+        <option value="Automotive" class="search-option2" {% if request.args.get('category') == 'Automotive' %}selected{% endif %}>Automotive</option>
+        <option value="Pet Supplies" class="search-option2" {% if request.args.get('category') == 'Pet Supplies' %}selected{% endif %}>Pet Supplies</option>
+        <option value="Office Supplies" class="search-option2" {% if request.args.get('category') == 'Office Supplies' %}selected{% endif %}>Office Supplies</option>
+        <option value="Music" class="search-option2" {% if request.args.get('category') == 'Music' %}selected{% endif %}>Music</option>
+        <option value="Movies" class="search-option2" {% if request.args.get('category') == 'Movies' %}selected{% endif %}>Movies</option>
+        <option value="Video Games" class="search-option2" {% if request.args.get('category') == 'Video Games' %}selected{% endif %}>Video Games</option>
+        <option value="Baby" class="search-option2" {% if request.args.get('category') == 'Baby' %}selected{% endif %}>Baby</option>
+        <option value="Furniture" class="search-option2" {% if request.args.get('category') == 'Furniture' %}selected{% endif %}>Furniture</option>
+        <option value="Accessories" class="search-option2" {% if request.args.get('category') == 'Accessories' %}selected{% endif %}>Accessories</option>
+        <option value="Home Decor" class="search-option2" {% if request.args.get('category') == 'Home Decor' %}selected{% endif %}>Home Decor</option>
+        <option value="Tools" class="search-option2" {% if request.args.get('category') == 'Tools' %}selected{% endif %}>Tools</option>
+        <option value="Garden" class="search-option2" {% if request.args.get('category') == 'Garden' %}selected{% endif %}>Garden</option>
+        <option value="Beauty" class="search-option2" {% if request.args.get('category') == 'Beauty' %}selected{% endif %}>Beauty</option>
+        <option value="Luggage" class="search-option2" {% if request.args.get('category') == 'Luggage' %}selected{% endif %}>Luggage</option>
+        <option value="Watches" class="search-option2" {% if request.args.get('category') == 'Watches' %}selected{% endif %}>Watches</option>
+      </select>
+      <input type="text" placeholder="Search Amazon" class="search-input">
+      <div class="search-icon" onclick="redirectToItems()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <form class="d-flex" role="search" action="/products" method="get" id="itemsForm">
+        <input class="form-control me-2 search-input visually-hidden" type="text" name="k" id="kInput" aria-label="Search">
+        <input type="hidden" name="category" id="categoryInput">
+      </form>
+    </div>
+    
+    <style>
+      .visually-hidden {
+        position: absolute !important;
+        height: 1px; 
+        width: 1px; 
+        overflow: hidden;
+        clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+        clip: rect(1px, 1px, 1px, 1px); /* Modern browsers */
+        white-space: nowrap; /* Added line */
+      }
+    </style>
+    
+    <script>
+      function redirectToItems() {
+  
+          var inputValue = document.querySelector('.search-input').value;
+          var categoryValue = document.querySelector('#categorySelect').value;
+          console.log("inputValue")
+          console.log(inputValue)
+          console.log(categoryValue)
+    
+          document.getElementById('kInput').value = inputValue;
+          document.getElementById('categoryInput').value = categoryValue;
+          
+          document.getElementById('itemsForm').submit();
+      }
+    </script>
+    <div class="sign">
+      {% if current_user.is_authenticated %}
+      <p class="hello">
+        Hello,{{current_user.firstname}}
+      </p>
+
+      <div class="dropList">
+        <ul class="dropList">
+          <li>
+            <a href="{{ url_for('users.user_detail', user_id=current_user.id) }}">
+              <img src="https://www.elevenforum.com/data/attachments/82/82529-ade63e4209709292183f654907b168f5.jpg"
+                alt="Account & Lists">
+            </a>
+          <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+        </ul>
+      </div>
+      {% else %}
+      <a class="hello cart-text" href="{{ url_for('users.login') }}">Login</a>
+      {% endif %}
+      <div>
+      </div>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="box6 border">
+      <a class="cart-text" href = "{{ url_for('orders.getUserOrders',user_id=current_user.id) }}">
+        Orders
+      </a>
+    </div>
+    {% endif %} 
+
+    {% if current_user.is_authenticated %}
+    <!-- <a class="text-white nav-link active link-light" aria-current="page"
+      href=" {{url_for('users.user_cart', user_id=current_user.id) }}"> -->
+      <div class="cart border">
+        <i class="fa-solid fa-cart-shopping">
+        </i>
+        <a class="cart-text" href = "{{ url_for('users.user_cart', user_id=current_user.id) }}" style="display: block; width: 100%; height: 100%;">Cart</a>
+      </div>
+      {% endif %}
+    <!-- </a> -->
+  </div>
+  {% block content %}
+  {% endblock %}
+
+  <!-- Footer -->
+  <footer>
+    <div class="firstpanel">
+      Back to top
+    </div>
+    <div class="secondpanel">
+      <ul>
+       <p>Get to Know Us</p>
+       <a>Careers</a>
+       <a>Blog</a>
+       <a>About Amazon</a>
+       <a>Investor Relations</a>
+       <a>Amazon Devices</a>
+       <a>Amazon Science</a>
+      </ul>
+      <ul>
+        <p>Make Money with Us</p>
+        <a>Sell products on Amazon</a>
+        <a>Sell on Amazon Business</a>
+        <a>Sell apps on Amazon</a>
+        <a>Become an Affiliate</a>
+        <a>Self-Publish with Us</a>
+        <a>Host an Amazon Hub</a>
+        <a>›See More Make Money with Us</a>
+       </ul>
+       <ul>
+       <p>Amazon Payment Products</p>
+       <a>Amazon Business Card</a>
+       <a>Shop with Points</a>
+       <a>Reload Your Balance</a>
+       <a>Amazon Currency Converter</a>
+      </ul>
+        <ul>
+        <p>Let Us Help You</p>
+        <a>Amazon and COVID-19</a>
+        <a>Your Account</a>
+        <a>Your Orders</a>
+        <a>Shipping Rates & Policies</a>
+        <a>Returns & Replacements</a>
+        <a>Manage Your Content and Devices</a>
+        <a>Amazon Assistant</a>
+        <a>Help</a>
+       </ul>
+    </div>
+    <div class="thirdpanel">
+      <div class="logo"></div>
+      <div class="select-op">
+      <select name="" id="" class="sele">
+        <option value="En">English</option>
+      </select>
+      <select name="" id="" class="sele">
+        <option value="1">$ USD - U.S. Dollar</option>
+      </select>
+      
+      <select name="" id="" class="sele">
+        <option value="4"> United states</option>
+      </select>
+      </div>
+    </div>
+    <div class="panel4">
+      <div class="page">
+        <a href="">Conditions of Use</a>
+          <a href="">Privacy Notice</a>
+          <a href="">Your Ads Privacy Choices</a>
+      </div>
+      <div class="copyright">
+        © 1996-2023, Amazon.com, Inc. or its affiliates
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+
+
+</html>

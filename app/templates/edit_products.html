@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .form-section {
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+    .product-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9fa;
+    }
+    .remove-btn {
+        color: red;
+        cursor: pointer;
+    }
+    .stock-view {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+    .form-section .form-group {
+        margin-bottom: 20px;  /* 调整为所需的间距 */
+    }
+
+    .product-item {
+        margin-bottom: 30px; /* 调整产品项之间的间距 */
+    }
+    .input-group{
+    margin-top: 10px;  /* 增加按钮上方的间距 */
+    margin-bottom: 10px; /* 增加按钮下方的间距 */
+    }
+
+
+</style>
+<div class="form-section bootstrap-iso">
+    <div class="container">
+        <h2>Add New Product</h2>
+        <form method="post" action="/add_product" style="margin-top: 20px;">
+            <select class="form-control" name="product_id" id="product_id">
+                {% for product in products_not_in_sell %}
+                <option value='{{ product.0 }}'>{{ product.2 }}</option>
+                {% endfor %}
+            </select>
+            <input style="margin-top: 5px;" class="form-control" type="number" name="price" placeholder="Price" required>
+            <input style="margin-top: 5px;" class="form-control" type="number" name="stock" placeholder="Stock" required>
+            <button style="margin-top: 5px;" class="btn btn-primary" type="submit">Add Product</button>
+        </form>
+
+        <h2 style="margin-top: 20px;">Create New Product</h2>
+        <form method="post" action="/create_product">
+            <select class="form-control" name="category">
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <input style="margin-top: 5px;" class="form-control" type="text" name="name" placeholder="Product Name" required>
+            <button style="margin-top: 5px;" class="btn btn-primary" type="submit">Create Product</button>
+        </form>
+    </div>
+</div>
+<div class="form-section bootstrap-iso">
+    <div class="container">
+        <h2>Edit Product Info</h2>
+        {% for product in products %}
+        <div class="product-item">
+            <h3>{{ product.name }}</h3>
+            <p>Category: {{ product.category }}</p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <form method="post" action="{{ url_for('products.update_product', product_id=product.pid) }}">
+                        <div class="input-group">
+                            <label for="price-{{ product.pid }}">Update Price:</label>
+                            <input class="form-control" type="text" id="price-{{ product.pid }}" name="price" value="{{ product.price }}" required>
+                            <button class="input-group" style="margin-top: 40px;" class="btn btn-primary" type="submit">Update Price</button>
+                        </div>
+                    </form>
+                    
+                    <form method="post" action="{{ url_for('products.update_product', product_id=product.pid) }}">
+                        <div class="input-group">
+                            <label for="stock-{{ product.pid }}">Update Stock:</label>
+                            <input class="form-control" type="number" id="stock-{{ product.pid }}" name="stock" value="{{ product.stock }}" required>
+                            <button class="input-group" style="margin-top: 40px;" class="btn btn-primary" type="submit">Update Stock</button>
+                        </div>
+                    </form>
+                    <form method="post" action="{{ url_for('products.update_product', product_id=product.pid) }}">
+                        <div class="input-group">
+                            <label for="description-{{ product.pid }}">Update Description:</label>
+                            <input class="form-control" type="text" id="description-{{ product.pid }}" name="description" value="{{ product.description }}" required>
+                            <button class="input-group" style="margin-top: 40px;" class="btn btn-primary" type="submit">Update Description</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <form method="post" action="{{ url_for('products.update_product', product_id=product.pid) }}" enctype="multipart/form-data">
+                        <p style="margin-top: 10px;" class="stock-view">
+                            {% if product.image %}
+                                You have already uploaded an image
+                            {% else %}
+                                No image has been uploaded
+                            {% endif %}
+                        </p>
+                        <div class="input-group">
+                            <input type="file" id="image-{{ product.pid }}" name="image" accept="image/*" required>
+                            <button class="input-group" style="margin-top: 40px;" class="btn btn-primary" type="submit">Update Image</button>
+                        </div>
+                    </form>
+                    <form method="post" action="{{ url_for('products.remove_product', product_id=product.pid) }}">
+                        <div class="input-group">
+                            <button class="input-group" style="margin-top: 40px;" class="btn btn-danger" type="submit">Remove Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p>No products found in your inventory.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

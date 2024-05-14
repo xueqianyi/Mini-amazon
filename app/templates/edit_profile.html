@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="bootstrap-iso">
+
+    <div class="container">
+        <h1 class="mt-5 mb-4">Update Your Profile</h1>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-warning" role="alert">
+              {% for message in messages %}
+                {{ message }}<br>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+      
+        <form action="{{ url_for('users.edit_profile') }}" method="post" novalidate>
+          {{ form.hidden_tag() }}
+      
+          <div class="form-group mb-3">
+            {{ form.firstname.label(class="form-label") }}
+            {{ form.firstname(class="form-control", size=32) }}
+            {% if form.firstname.errors %}
+              {% for error in form.firstname.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <div class="form-group mb-3">
+            {{ form.lastname.label(class="form-label") }}
+            {{ form.lastname(class="form-control", size=32) }}
+            {% if form.lastname.errors %}
+              {% for error in form.lastname.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <div class="form-group mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", size=64) }}
+            {% if form.email.errors %}
+              {% for error in form.email.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <div class="form-group mb-3">
+            {{ form.address.label(class="form-label") }}
+            {{ form.address(class="form-control", size=64) }}
+            {% if form.address.errors %}
+              {% for error in form.address.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <div class="form-group mb-3">
+            {{ form.balance.label(class="form-label") }}
+            {{ form.balance(class="form-control", size=32, step="0.01") }}
+            {% if form.balance.errors %}
+              {% for error in form.balance.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <div class="form-check mb-3">
+            {{ form.isSeller.label(class="form-check-label") }}
+            {{ form.isSeller(class="form-check-input") }}
+            <small class="form-text text-muted">Check this box if you want to register as a seller</small>
+            {% if form.isSeller.errors %}
+              {% for error in form.isSeller.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+      </div>
+</div>
+{% endblock %}

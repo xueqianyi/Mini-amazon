@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .stretch-card>.card {
+        width: 100%;
+        min-width: 100%
+    }
+
+    body {
+        background-color: #f9f9fa
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .card-sub {
+        border: none;
+        -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+    }
+
+    .card-img-top {
+        width: 100%;
+        border-top-left-radius: calc(.25rem - 1px);
+        border-top-right-radius: calc(.25rem - 1px)
+    }
+
+    .card-block {
+        padding: 1.25rem;
+        background-color: #fff !important
+    }
+
+
+    .sortable-moves {
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px;
+    }
+
+    .sortable-moves {
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        min-height: 3.55556em;
+        padding-left: 7.11111em;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sortable-moves img {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px;
+    }
+
+    .orders-header h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        margin-left: 20px;
+    }
+
+    .orders-header hr {
+        border: none;
+        height: 1px;
+        background-color: #d3d3d3;
+        /* Grey color for the horizontal line */
+        margin-top: 5px;
+        margin-bottom: 0;
+        /* Adjust as needed to add space below the line */
+    }
+
+    .title-padding {
+        padding-top: 40px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .text-product {
+        font-size: 10px;
+    }
+
+    .category-info {
+        color: #888;
+    }
+
+    .fa-star, .fa-star-half-alt, .far.fa-star {
+        color: #f3a843;
+    }
+
+    .price {
+        font-size: 20px; 
+    }
+
+    .price .currency {
+        font-size: 12px; 
+        vertical-align: super;
+        margin-right: -0.4em;
+    }
+
+    .price .amount {
+        position: relative;
+        top: -0.1em;
+    }
+
+    .price .cents {
+        font-size: 12px;
+        vertical-align: top;
+        margin-left: -0.4em;
+    }
+
+</style>
+
+<div class="title-padding orders-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Results</h1>
+        <div>
+            <form action="/products" method="get">
+                <input type="hidden" name="category" value="{{ request.args.get('category', 'All') }}">
+                <input type="hidden" name="k" value="{{ request.args.get('k', '') }}">
+                <select name="s" onchange="this.form.submit()">
+                    <option value="relevanceblender" {% if request.args.get('s', 'relevanceblender') == 'relevanceblender' %}selected{% endif %}>Featured</option>
+                    <option value="price-asc-rank" {% if request.args.get('s') == 'price-asc-rank' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price-des-rank" {% if request.args.get('s') == 'price-des-rank' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="review-rank" {% if request.args.get('s') == 'review-rank' %}selected{% endif %}>Avg. Customer Review</option>
+                    <option value="exact-aware-popularity-rank" {% if request.args.get('s') == 'exact-aware-popularity-rank' %}selected{% endif %}>Best Sellers</option>
+                </select>
+            </form>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-6">
+                <!-- Draggable Multiple List card start -->
+                <div class="card-block p-b-0">
+                    <div class="row">
+                        <div class="col-md-12" id="sortable">
+                            {% if items %}
+                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                                {% for item in items %}
+                                <a href="{{ url_for('products.show_detailed_product', sellerId=item.sid, productId=item.pid, k=request.args.get('k', ''), category=request.args.get('category', 'All')) }}" style="text-decoration: none; color: inherit;">
+                                    <div class="sortable-moves">
+                                        <img class="text-product img-fluid p-absolute image-dim"
+                                            src="{{item.image if item.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="">
+                                        <h4>{{ item.name }}</h4>
+                                        <p>{{ item.description }}</p>
+                                        <p style="color: #575959; font-size: small">
+                                            {% if item.totalSale >= 100000 %}
+                                                {{ (item.totalSale // 100000) * 100 | string + 'k+' }} bought in past month
+                                            {% elif item.totalSale >= 1000 %}
+                                                {{ (item.totalSale // 1000) | string + 'k+' }} bought in past month
+                                            {% elif item.totalSale >= 100 %}
+                                                {{ (item.totalSale // 100 * 100) | string + '+' }} bought in past month
+                                            {% endif %}
+                                        </p>
+                                        <div>
+                                            {% if item.avgReviewRating %}
+                                                {% set rating = item.avgReviewRating | round(1, 'common') %}
+                                                {% set full_stars = (rating // 1) | int %}
+                                                {% set half_star = ((rating - full_stars) >= 0.5) | int %}
+                                                {% for _ in range(full_stars) %}
+                                                    <i class="fas fa-star"></i>
+                                                {% endfor %}
+                                                {% if half_star %}
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                {% endif %}
+                                                {% for _ in range(5 - full_stars - half_star) %}
+                                                    <i class="far fa-star"></i>
+                                                {% endfor %}
+                                                <span style="color: #2f7083; margin-left: 5px;">{{ item.avgReviewRating | round(1, 'common') }}</span>
+                                            {% else %}
+                                                {% for _ in range(5) %}
+                                                    <i class="far fa-star"></i>
+                                                {% endfor %}
+                                                <span style="color: #2f7083; margin-left: 5px;">No reviews yet</span>
+                                            {% endif %}
+                                        </div>            
+                                        <div class="price">
+                                            <span class="currency">$</span>
+                                            <span class="amount">{{ item.price | int }}</span>
+                                            <span class="cents">{{ '%02d' | format((item.price - item.price | int) * 100) }}</span>
+                                        </div>
+                                        <div style="color: gray; font-size: small;">
+                                            {% if item.stock > 0 %}
+                                                In Stock: {{item.stock}} left
+                                            {% else %}
+                                                Out of stock
+                                            {% endif %}
+                                        </div>                                                                      
+                                    </div>
+                                </a>
+                                {% endfor %}
+
+                                {% else %}
+                                <div class="col">
+                                    <p class="text-center">No Items found</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

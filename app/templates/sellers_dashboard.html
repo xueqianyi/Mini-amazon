@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="buyer-analytics">
+    <h1></h1>
+    <div class="buyer-list">
+        {% for key in items %}
+        <div class="buyer">
+            <div class="buyer-header">
+                {% if items[key] | length > 0 %}
+                <div>User's last name: {{items[key][0].lastname}}</div>
+                {% endif %}
+            </div>
+            <div class="buyer-body">
+                {% for item in items[key] %}
+                <div class="item">
+                    <div>
+                        <img src="{{item.image if item.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}"></img>
+                    </div>
+                    <div class="buyer-main">
+                        <div class="productname">
+                            {{ item.productname }}
+                        </div>
+                        <div class="score">
+                            {% set rating = item.score | round(1, 'common') %}
+                            {% set full_stars = (rating // 1) | int %}
+                            {% set half_star = ((rating - full_stars) >= 0.5) | int %}
+                            {% for _ in range(full_stars) %}
+                                <i class="fas fa-star"></i>
+                            {% endfor %}
+                            {% if half_star %}
+                                <i class="fas fa-star-half-alt"></i>
+                            {% endif %}
+                            {% for _ in range(5 - full_stars - half_star) %}
+                                <i class="far fa-star"></i>
+                            {% endfor %}
+                            <span style="color: #2f7083; margin-left: 5px;">{{ item.score | round(1, 'common') }}</span>
+                        </div>
+                    </div>
+                    <div class="end">
+                        <div class="category">
+                            {{ item.category }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+</script>
+
+<style>
+.buyer {
+  margin: 16px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  width: 90%;
+  .buyer-header {
+    margin-bottom: 10px;
+  }
+  .buyer-body {
+    padding: 0 16px;
+  }
+  .item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      margin-right: 12px;
+    }
+    .buyer-main {
+      flex: 1;
+      display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .productname {
+        margin-bottom: 12px;
+        font-weight: bold;
+    }
+  }
+  .item:last-child {
+    border-bottom: none;
+  }
+}
+</style>
+
+{% endblock %}

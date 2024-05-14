@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .stretch-card>.card {
+        width: 100%;
+        min-width: 100%
+    }
+
+    body {
+        background-color: #f9f9fa
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .card-sub {
+        border: none;
+        -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+    }
+
+    .card-img-top {
+        width: 100%;
+        border-top-left-radius: calc(.25rem - 1px);
+        border-top-right-radius: calc(.25rem - 1px)
+    }
+
+    .card-block {
+        padding: 1.25rem;
+        background-color: #fff !important
+    }
+
+    .sortable-moves {
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px;
+    }
+
+    .sortable-moves {
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        min-height: 3.55556em;
+        padding-left: 7.11111em;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sortable-moves img {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px;
+    }
+
+    .orders-header h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        margin-left: 20px;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+    }
+
+    .orders-header hr {
+        border: none;
+        height: 1px;
+        background-color: #d3d3d3;
+        margin-top: 5px;
+        margin-bottom: 0;
+    }
+
+    .title-padding {
+        padding-top: 40px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .text-product {
+        font-size: 10px;
+    }
+
+    .category-info {
+        color: #888;
+    }
+
+    .popup {
+        display: none; 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .popup-overlay {
+        display: none; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .btn-info {
+        background-color: black;
+        border-color: black;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-info:hover {
+        background-color: #000000;
+        border-color: #010101;
+    }
+    .container0 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-end; 
+}
+
+.price-checkout {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+    width: 100%; 
+    margin-bottom: 10px;
+}
+.promo-code {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+    width: 100%; 
+    margin-top: 10px;
+    white-space: nowrap; 
+}
+
+.price-checkout > span {
+    margin-right: 20px; 
+}
+
+.promo-code input {
+    flex-grow: 1;           
+    max-width: 150px;       
+    margin-right: 10px;     
+}
+.discount-message {
+    margin-top: 10px; /* Adds space above the message for clear separation */
+    color: black
+}
+</style>
+
+   
+{% if current_user.is_authenticated%}
+<div class="title-padding orders-header" style="display: flex; justify-content: space-between; align-items: center;">
+<h1>My Cart</h1>
+<div class="container0">
+    <div class="price-checkout">
+        <span>Total Price: ${{ cart_total_price }}</span>
+        <form action="{{ url_for('users.helper_function', user_id=current_user.id) }}" method="post">
+            <input type="text" name="coupon_code" placeholder="Enter Coupon Code" value="{{ request.form.coupon_code }}" autocomplete="off" style="margin-right: 10px;">
+            <button type="submit" name="action" value="apply_coupon" class="btn btn-info">Apply Coupon Code</button>
+            <button type="submit" name="action" value="checkout" class="btn btn-info">Checkout</button>
+            {% if flag==1 %}
+                <div class="discount-message">
+                    <span>Code Applied, {{ discount }}% off</span>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+
+</div>
+
+</div>
+<div id="customPopup" class="popup">
+    <p id="popupMessage">Message</p>
+    <button onclick="closePopup()">OK</button> 
+</div>
+
+<div id="popupOverlay" class="popup-overlay" onclick="closePopup()"></div>
+
+<script>
+function openPopup(message) {
+    document.getElementById('popupMessage').textContent = message;
+    document.getElementById('customPopup').style.display = 'block'; 
+    document.getElementById('popupOverlay').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('customPopup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+}
+
+window.onload = function() {
+    if ("{{ inventory_alert }}" == "True")
+    openPopup("Sorry, there are no enough inventories!");
+    
+    if ("{{ balance_alert }}" == "True")
+    openPopup("Oops, your balance is not enough!");
+    
+    if ("{{ coupon_alert }}" == "True")
+    openPopup("Please enter a valid coupon code!");
+};
+</script>
+
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-6">
+                <div class="card-block p-b-0">
+                    <div class="row">
+                        <div class="col-md-12" id="sortable">
+                            {% if cart_found %}
+                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                                {% for cart in cart_items %}
+                                    {% if not cart.c_status %}
+                                        <div class="sortable-moves">
+                                            <form action="{{ url_for('users.delete_item', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                <button type="submit" class="button delete" style="background: none; border: none; padding: 0;">
+                                                <i class="material-icons">delete</i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ url_for('users.save_for_later', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post">
+                                                <button type="submit" class="btn btn-secondary btn-sm">Save for Later</button>
+                                            </form>
+                                            <a href="{{ url_for('products.show_detailed_product', sellerId=cart.c_sid, productId=cart.c_pid) }}" style="text-decoration: none; color: inherit;">
+                                                <img src="{{ cart.image if cart.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}" alt="" class="text-product img-fluid p-absolute image-dim">
+                                                <h3>{{ cart.productName }}</h3>
+                                            </a>
+                                            <p>Unit Price: {{ cart.c_price }}</p>
+                                            <form action="{{ url_for('users.change_quantity', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post" class="quantity-form">
+                                                <label>Quantity:</label>
+                                                <input type="number" name="quantity" value="{{ cart.c_quantity }}" min="1" style="width: 60px;" class="auto-submit">
+                                            </form>                                         
+                                            <p>Total Price: {{ cart.total_price }}</p>
+                                            <p class="category-info">Seller Name: {{ cart.s_firstname + ' ' + cart.s_lastname }}</p>
+                                            <p>Description: {{ cart.productDescription }}</p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-center">No Items found</p>
+                        {% endif %}
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="title-padding orders-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>Saved for Later</h1>
+    <hr style="width: 100%; position: absolute; bottom: 0;">
+</div>
+
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-6">
+                <!-- Draggable Multiple List card start -->
+                <div class="card-block p-b-0">
+                    <div class="row">
+                        <div class="col-md-12" id="sortable">
+                            {% if saved_found %}
+                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                                {% for cart in cart_items %}
+                                    {% if cart.c_status %} 
+                                        <div class="sortable-moves" style="">
+                                                <form action="{{ url_for('users.delete_item', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                    <button type="submit" class="button delete" style="background: none; border: none; padding: 0;">
+                                                    <i class="material-icons">delete</i>
+                                                    </button>
+                                                </form>
+                                            <form action="{{ url_for('users.move_to_cart', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post">
+                                                <button type="submit" class="save-btn">Move to My Cart</button>
+                                            </form>
+                                            <a href="{{ url_for('products.show_detailed_product', sellerId=cart.c_sid, productId=cart.c_pid) }}" style="text-decoration: none; color: inherit;">
+                                                <img src="{{ cart.image if cart.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}" alt="" class="text-product img-fluid p-absolute image-dim">
+                                                <h3>{{ cart.productName }}</h3>
+                                            </a>
+                                            <p>Unit Price: {{ cart.c_price}}</p>
+                                            <form action="{{ url_for('users.change_quantity', user_id=current_user.id, pid=cart.c_pid, sid=cart.c_sid) }}" method="post" class="quantity-form">
+                                                <label>Quantity:</label>
+                                                <input type="number" name="quantity" value="{{ cart.c_quantity }}" min="1" style="width: 60px;" class="auto-submit">
+                                            </form> 
+                                            <p>Total Price: {{ cart.total_price}}</p>
+                                            <p class="category-info">Seller Name: {{ cart.s_firstname + ' ' +cart.s_lastname }}</p>
+                                            <p>Description: {{ cart.productDescription }}</p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% else %}
+                                <div class="col">
+                                    <p class="text-center">No Items found</p>
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Draggable Multiple List card end -->
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('form').forEach(function(form) {
+            form.onsubmit = function() {
+                var quantityInput = this.querySelector('input[name="quantity"]');
+                if (quantityInput && parseInt(quantityInput.value, 10) < 1) {
+                    alert('Invalid quantity provided. Please enter a quantity of at least 1.');
+                    return false; 
+                }
+                return true;
+            };
+        });
+    });
+    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.auto-submit').forEach(function(input) {
+            input.addEventListener('change', function() {
+                this.form.submit();  
+            });
+        });
+    });
+    </script>
+{% endblock %}

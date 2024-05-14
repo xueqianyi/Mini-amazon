@@ -1,0 +1,934 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+
+body {
+    font-family: sans-serif;
+}
+
+header {
+    height: 15vh;
+    width: 100%;
+    background: lightgray;
+    margin-bottom: 50px;
+}
+
+#product-info {
+    display: flex;
+    align-items: center;
+    width: 95%;
+    margin: 30px;
+}
+
+.item-image-parent {
+    order: 1;
+    width: 50%;
+    display: flex;
+}
+
+.item-info-parent {
+    order: 2;
+    width: 50%;
+}
+
+.item-list-vertical {
+    order: 1;
+    width: 10%;
+    overflow-y: auto;
+    margin-top: 50px;
+}
+
+.item-image-main {
+    order: 2;
+    width: 88%;
+    height: 100%;
+}
+
+/* sectioning completed */
+
+
+.thumb-box {
+    width: 80%;
+    margin: 12px auto;
+    background: white;
+    border: 1px solid gray;
+}
+.thumb-box img {
+    width: 100%;
+    height: 100%;
+}
+
+.item-image-main img {
+    width: 100%;
+    height: auto;
+}
+
+.thumb-box:hover {
+    cursor: pointer;
+    border-color: #e77600;;
+    box-shadow: 0px 1px 5px 1px #e77600;
+}
+
+/* Item Info */
+.main-info h4{
+    font-size: 35px;
+    margin-bottom: 6px;
+    font-weight: 400
+}
+
+
+.main-info p {
+    font-size: 15px;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+#price {
+    color: #A4341A;
+    font-size: 20px;
+}
+
+/* Select Items */
+
+.change-color {
+    margin-bottom: 10px;
+}
+
+.change-color .thumb-box{
+    margin: 10px 10px 10px 0;
+    width: 40px;
+    display: inline-block;
+}
+
+.change-quantity select {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border-color: rgb(189, 189, 189);
+    margin-top: 10px;
+}
+
+.description ul {
+    padding-left: 17px;
+    font-size: 15px;
+    line-height: 1.3rem;
+}
+
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.add-to-cart {
+    /* display: flex; */
+    align-items: baseline;
+    margin: 15px;
+
+}
+
+.add-to-cart-btn {
+    background-color: #ffcc00;
+    color: black;
+    font-size: 14px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    width: 150px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #e6b800;
+}
+
+#quantity {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 5px 16px;
+    margin: 0;
+    font-size: 16px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    appearance: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#quantity:hover {
+    border-color: #888;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+}
+
+#quantity:focus {
+    border-color: #555;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+.fa-star, .fa-star-half-alt, .far.fa-star {
+        color: #f3a843;
+}
+
+.seller-info {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    color: #3a7789;
+    margin-bottom: 5px;
+}
+
+.seller-info a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.stretch-card>.card {
+        width: 100%;
+        min-width: 100%
+    }
+
+    body {
+        background-color: #f9f9fa
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .card-sub {
+        border: none;
+        -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+    }
+
+    .card-img-top {
+        width: 100%;
+        border-top-left-radius: calc(.25rem - 1px);
+        border-top-right-radius: calc(.25rem - 1px)
+    }
+
+    .card-block {
+        padding: 1.25rem;
+        background-color: #fff !important
+    }
+
+    .sortable-moves {
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px;
+    }
+
+    .sortable-moves {
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        min-height: 3.55556em;
+        padding-left: 7.11111em;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sortable-moves img {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px;
+    }
+
+    .orders-header h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        margin-left: 20px;
+    }
+
+    .orders-header hr {
+        border: none;
+        height: 1px;
+        background-color: #d3d3d3;
+        /* Grey color for the horizontal line */
+        margin-top: 5px;
+        margin-bottom: 0;
+        /* Adjust as needed to add space below the line */
+    }
+
+    .title-padding {
+        padding-top: 40px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .text-product {
+        font-size: 10px;
+    }
+
+    .category-info {
+        color: #888;
+    }
+
+    .fa-star, .fa-star-half-alt, .far.fa-star {
+        color: #f3a843;
+    }
+
+    .price {
+        font-size: 20px; 
+    }
+
+    .price .currency {
+        font-size: 12px; 
+        vertical-align: super;
+        margin-right: -0.4em;
+    }
+
+    .price .amount {
+        position: relative;
+        top: -0.1em;
+    }
+
+    .price .cents {
+        font-size: 12px;
+        vertical-align: top;
+        margin-left: -0.4em;
+    }
+
+    .add-to-cart-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: gray;
+    }
+
+</style>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>amazon | Product Page</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <!-- <header>
+    </header> -->
+
+    <section id="product-info">
+
+        <div class="item-image-parent">
+            <div class="item-list-vertical">
+                <div class="thumb-box">
+                    <img src="{{product.image if product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}" alt="thumbnail" />
+                </div>
+                <div class="thumb-box">
+                    <img src="{{product.image if product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="thumbnail" />
+                </div>
+                <div class="thumb-box">
+                    <img src="{{product.image if product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="thumbnail" />
+                </div>
+                <div class="thumb-box">
+                    <img src="{{product.image if product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="thumbnail" />
+                </div>
+
+            </div>
+            <div class="item-image-main">
+                <img src="{{product.image if product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="default" />
+            </div>
+        </div>
+
+        <div class="item-info-parent">
+            <!-- main info -->
+            <div class="main-info">
+                <h4>{{ product.name }}</h4>
+                <div class="seller-info">
+                    <a href="{{ url_for('users.user_detail', user_id=seller.id) }}">
+                        <span>Visit the {{ seller.firstname }} {{ seller.lastname }} store</span>
+                    </a>
+                </div>
+                <div>
+                    <span style="margin-right: 5px;">{{ product.avgReviewRating | round(1, 'common') }}</span>
+                    {% set rating = product.avgReviewRating | round(1, 'common') %}
+                    {% set full_stars = (rating // 1) | int %}
+                    {% set half_star = ((rating - full_stars) >= 0.5) | int %}
+                    {% for _ in range(full_stars) %}
+                        <i class="fas fa-star"></i>
+                    {% endfor %}
+                    {% if half_star %}
+                        <i class="fas fa-star-half-alt"></i>
+                    {% endif %}
+                    {% for _ in range(5 - full_stars - half_star) %}
+                        <i class="far fa-star"></i>
+                    {% endfor %}
+                </div>
+                <p style="color: #0b0c0c; font-size: small; margin-top: 8px;">
+                    {% if product.totalSale >= 100000 %}
+                        {{ (product.totalSale // 100000) * 100 | string + 'k+' }} bought in past month
+                    {% elif product.totalSale >= 1000 %}
+                        {{ (product.totalSale // 1000) | string + 'k+' }} bought in past month
+                    {% elif product.totalSale >= 100 %}
+                        {{ (product.totalSale // 100 * 100) | string + '+' }} bought in past month
+                    {% endif %}
+                </p>
+                <hr style="margin-bottom: 10px;">
+                <p>Price: <span id="price">${{product.price}}</span></p>
+            </div>
+            <!-- Choose -->
+            <div class="select-items">
+                <div class="description">
+                    <ul>
+                        <li><strong>Category:</strong> {{ product.category }}</li>
+                        <li><strong>Description:</strong> {{ product.description }}</li>
+                    </ul>
+                </div>                
+            </div>
+            
+            {% if current_user.is_authenticated %}
+            <div class="add-to-cart">
+                <form method="POST" action="{{ url_for('products.add_to_cart', user_id=current_user.id) }}">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" style="width: 40px;">
+                    <div style="color: gray; font-size: small; margin-top: 5px;">
+                        {% if product.stock > 0 %}
+                            In Stock: {{product.stock}} left
+                        {% else %}
+                            Out of stock
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                    <input type="hidden" name="pid" value="{{ product.pid }}">
+                    <input type="hidden" name="sid" value="{{ seller.id }}">
+                    <button type="submit" class="add-to-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>Add to Cart</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="add-to-cart">
+                <form method="POST" action="{{ url_for('users.login') }}">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" style="width: 40px;">
+                    <div style="color: gray; font-size: small; margin-top: 5px;">
+                        {% if product.stock > 0 %}
+                            In Stock: {{product.stock}} left
+                        {% else %}
+                            Out of stock
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                    <input type="hidden" name="pid" value="{{ product.pid }}">
+                    <input type="hidden" name="sid" value="{{ seller.id }}">
+                    <button type="submit" class="add-to-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>Add to Cart</button>
+                </form>
+            </div>
+            {% endif %}
+            
+    </section>
+
+    <!-- similar items  -->
+    <div class="title-padding orders-header">
+        <h1>Compare with similar items</h1>
+        <hr>
+    </div>
+    <div class="page-content page-container" id="page-content">
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-lg-12 col-xl-6">
+                    <div class="card-block p-b-0">
+                        <div class="row">
+                            <div class="col-md-12" id="sortable">
+                                
+                                {% if similar_products %}
+                                <div style="font-weight: 800; margin-top: 15px;">Recommendations</div>
+                                <hr>
+                                <div class="row row-cols-1 row-cols-md-3 g-4">
+                                    {% for similar_product in similar_products %}
+                                    <a href="{{ url_for('products.show_detailed_product', sellerId=similar_product.sid, productId=similar_product.pid, k=request.args.get('k', ''), category=request.args.get('category', 'All')) }}" style="text-decoration: none; color: inherit;">
+                                        <div class="sortable-moves">
+                                            <img class="text-product img-fluid p-absolute image-dim"
+                                                src="{{similar_product.image if similar_product.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg'}}" alt="">
+                                            <h4>{{ similar_product.name }}</h4>
+                                            <p>{{ similar_product.description }}</p>
+                                            <p style="color: #575959; font-size: small">
+                                                {% if similar_product.totalSale >= 100000 %}
+                                                    {{ (similar_product.totalSale // 100000) * 100 | string + 'k+' }} bought in past month
+                                                {% elif similar_product.totalSale >= 1000 %}
+                                                    {{ (similar_product.totalSale // 1000) | string + 'k+' }} bought in past month
+                                                {% elif similar_product.totalSale >= 100 %}
+                                                    {{ (similar_product.totalSale // 100 * 100) | string + '+' }} bought in past month
+                                                {% endif %}
+                                            </p>
+                                            <div>
+                                                {% if similar_product.avgReviewRating %}
+                                                    {% set rating = similar_product.avgReviewRating | round(1, 'common') %}
+                                                    {% set full_stars = (rating // 1) | int %}
+                                                    {% set half_star = ((rating - full_stars) >= 0.5) | int %}
+                                                    {% for _ in range(full_stars) %}
+                                                        <i class="fas fa-star"></i>
+                                                    {% endfor %}
+                                                    {% if half_star %}
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    {% endif %}
+                                                    {% for _ in range(5 - full_stars - half_star) %}
+                                                        <i class="far fa-star"></i>
+                                                    {% endfor %}
+                                                    <span style="color: #2f7083; margin-left: 5px;">{{ similar_product.avgReviewRating | round(1, 'common') }}</span>
+                                                {% else %}
+                                                    {% for _ in range(5) %}
+                                                        <i class="far fa-star"></i>
+                                                    {% endfor %}
+                                                    <span style="color: #2f7083; margin-left: 5px;">No reviews yet</span>
+                                                {% endif %}
+                                            </div>                                            
+                                            <div class="price">
+                                                <span class="currency">$</span>
+                                                <span class="amount">{{ similar_product.price | int }}</span>
+                                                <span class="cents">{{ '%02d' | format((similar_product.price - similar_product.price | int) * 100) }}</span>
+                                            </div>  
+                                        </div>
+                                    </a>  
+                                    {% if current_user.is_authenticated %}
+                                    <div style="margin: 0;" class="add-to-cart">
+                                        <form method="POST" action="{{ url_for('products.add_to_cart', user_id=current_user.id) }}">
+                                            <label for="quantity">Quantity:</label>
+                                            <input type="number" id="quantity" name="quantity" value="1" min="1" style="width: 40px;">
+                                            <div style="color: gray; font-size: small; margin-top: 5px;">
+                                                {% if product.stock > 0 %}
+                                                    In Stock: {{product.stock}} left
+                                                {% else %}
+                                                    Out of stock
+                                                {% endif %}
+                                            </div>
+                                            <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                                            <input type="hidden" name="pid" value="{{ product.pid }}">
+                                            <input type="hidden" name="sid" value="{{ seller.id }}">
+                                            <button type="submit" class="add-to-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>Add to Cart</button>
+                                        </form>
+                                    </div>
+                                    {% else %}
+                                    <div class="add-to-cart">
+                                        <form method="POST" action="{{ url_for('users.login') }}">
+                                            <label for="quantity">Quantity:</label>
+                                            <input type="number" id="quantity" name="quantity" value="{{ pq }}" min="1" style="width: 40px;">
+                                            <div style="color: gray; font-size: small; margin-top: 5px;">
+                                                {% if product.stock > 0 %}
+                                                    In Stock: {{product.stock}} left
+                                                {% else %}
+                                                    Out of stock
+                                                {% endif %}
+                                            </div>
+                                            <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                                            <input type="hidden" name="pid" value="{{ product.pid }}">
+                                            <input type="hidden" name="sid" value="{{ seller.id }}">
+                                            <button type="submit" class="add-to-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>Add to Cart</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}                                                                 
+                                        </div>
+                                    </a>
+                                    {% endfor %}
+    
+                                    {% else %}
+                                    <div style="margin-top: 15px;" class="col">
+                                        <p style="color: gray;" class="text-center">No similar items found</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+    <!-- reviews  -->
+    <div class="title-padding orders-header">
+        <h1>Reviews</h1>
+        <hr>
+    </div>
+    <div class="bootstrap-iso">
+        <br> <!--empty space-->
+        <div class="container my-4 border text-dark">
+            {% if current_user.is_authenticated and current_user.id != seller.id %}
+            <h2 class="text-dark text-center my-1 py-3">My review to {{product.name}}</h2>
+            <br> <!--empty space-->
+            
+            {% if showMyFeedback %} 
+
+            <!-- my review -->
+            <form id="form2" method="POST" action="{{ url_for('products.review_submit', sellerId=seller.id, productId=product.pid) }}"
+            enctype="multipart/form-data" class="review-card" style="padding: 2.5rem ;margin-bottom: 1.5rem;">
+                {{ form.hidden_tag() }}
+
+                {% if not form.score.data %}
+                <p class="text-center">You have not reviewed this product yet</p>
+                {% endif %}
+
+                <div class="form-group">
+                    {{ form.score.label(for="score") }}
+                    <!-- show stars -->
+                    <span class="stars" style="margin-right: 5px;">
+                    </span>
+                    {{ form.score(class="form-control", id="score") }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.content.label(for="content") }}
+                    {{ form.content(class="form-control", rows="3", id="content") }}
+                </div>
+    
+                <div class="form-group">
+                    {{ form.image.label }}
+                    <input type="file" id="imageFile" accept="image/*" />
+                    {{ form.image(type="hidden", id="imageData") }}
+                </div>
+    
+                <div style="align-items: center;">
+                    <img id="imagePreview" src="{{ form.image.data }}" alt="Image Preview" class="img-thumbnail" style="display: none; width: 100%; max-width: 600px; height: auto; flex-shrink: 0;">
+                </div>
+    
+                <br>
+                <div style="display: flex; align-items: center;">
+                    {{ form.submit(type="submit", class="btn btn-primary") }}
+                    <button type="button" id="deleteImageButton" class="btn btn-danger" style="display: none; margin-left: 10px;">Delete Image</button>
+    
+                    <button type="button" id="deleteReviewButton" class="btn btn-danger" style="display: none; margin-left: 10px;" 
+                    data-url="{{ url_for('products.review_delete', sellerId=seller.id, productId=product.pid) }}">Delete Review</button>
+                </div>
+            </form>
+            {% else %}
+
+            <div class="col">
+                <p class="text-center">You can not sumbit a feedback yet, since you haven't bought this product yet.</p>
+            </div>
+            {% endif %} <!-- endif showMyFeedback -->
+        
+            {% endif %}
+            <br>
+
+
+            <!-- other reviews -->
+            <h2 class="text-dark text-center my-1 py-3">Customer reviews</h2>
+            <div class="row">
+                {% if feedbacks %}
+                <select id="sort-select-feedbacks" style="float: right; margin-right: 20px;">
+                    <option value="date_desc">Most Recent</option>
+                    <option value="date_asc">Oldest</option>
+                    <option value="score_high">Highest Score</option>
+                    <option value="score_low">Lowest Score</option>
+                </select>
+                <br>
+                <br>
+                <br>
+                <div id="container-feedbacks">
+                    {% for feedback in feedbacks %}
+                    {% if feedback.uid != current_user.id %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 review-card" style="height: 350px; margin-bottom: 1.5rem;">
+                            <div class="card-body d-flex flex-column" style="padding: 1.25rem;">
+                                <div class="mb-3">
+                                    <!-- User Image and Info Wrapper -->
+                                    <a class="d-flex align-items-start" style="display: flex; align-items: center; text-decoration: none;"
+                                    href="{{ url_for('users.user_detail', user_id=feedback.uid) }}">
+                                        <!-- User Image -->
+                                        {% if feedback.userImage %}
+                                        <img src="{{ feedback.userImage }}" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% else %}
+                                        <img src="../../static/default_avatar.png" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% endif %}
+                                        <!-- Text Info -->
+                                        <p class="card-text" style="margin-left: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Date: {{ feedback.date }}<br>
+                                            <!-- Product: {{ feedback.productName }}<br> -->
+                                            User: {{ feedback.userFirstname }} {{ feedback.userLastname }}<br>
+                                            Score:
+                                            <span class="stars" style="margin-right: 5px;">
+                                                {% set score = feedback.score | float %}
+                                                {% set fullStars = score | int %}
+                                                {% set hasHalfStar = score % 1 >= 0.5 %}
+                                                {% for i in range(fullStars) %}
+                                                <i class="fas fa-star"></i>
+                                                {% endfor %}
+                                                {% if hasHalfStar %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                                {% endif %}
+                                                {% for i in range(fullStars + hasHalfStar, 5) %}
+                                                <i class="far fa-star"></i>
+                                                {% endfor %}
+                                            </span>
+                                            ({{ feedback.score }})<br>
+                                        </p>
+                                    </a>
+
+                                    <!-- Content Card -->
+                                    <br>
+                                    <div class="card p-2"style="overflow-y: auto; max-height: 225px;">
+                                        <p class="card-text">{{ feedback.content }}</p>
+                                        {% if feedback.image %}
+                                        <img src="{{ feedback.image }}" alt="Feedback Image"
+                                            class="card-img-top mx-auto d-block" style="width: 60%; height: auto;">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <br>
+                <div class="col">
+                    <p class="text-center">No feedbacks found</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- end of reviews -->
+
+</body>
+</html>
+
+{% if current_user.is_authenticated %}
+<script>
+document.getElementById('quantity').addEventListener('input', function() {
+    var quantity = this.value;  
+    var form = document.getElementById('add-to-cart-form');
+    var baseUrl = "{{ url_for('products.add_to_cart', user_id=current_user.id, pid=product.pid, sid=product.sid, quantity='1') }}";
+    // Update the form's action attribute only if quantity is not '1'
+    if (quantity !== '1') {
+        form.action = baseUrl.replace('1', quantity);
+    } else {
+        form.action = baseUrl;
+    }
+});
+
+
+
+</script>
+{% endif %}
+
+<!-- scripts for my review -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- show stars for score -->
+<script>
+    document.getElementById('score').addEventListener('input', function() {
+        let score = parseFloat(this.value);
+        if (score > 5) {
+            score = 5;
+            this.value = 5;
+        } else if (score < 0) {
+            score = 0;
+            this.value = 0;
+        }
+        const fullStars = Math.floor(score);
+        const hasHalfStar = score % 1 >= 0.5;
+        let starsHtml = '';
+        for (let i = 0; i < fullStars; i++) {
+          starsHtml += '<i class="fas fa-star"></i>';
+        }
+        if (hasHalfStar) {
+          starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        for (let i = fullStars + hasHalfStar; i < 5; i++) {
+          starsHtml += '<i class="far fa-star"></i>';
+        }
+        document.querySelector('.stars').innerHTML = starsHtml;
+      });
+</script>
+
+
+<!-- if review exists, show buttons-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var score = document.getElementById('score').value;
+        if (score !== "None" && score !== "") {
+            document.getElementById('score').dispatchEvent(new Event('input'));
+            document.getElementById('deleteReviewButton').style.display = 'flex';
+            var imageData = document.getElementById('imageData').value;
+            if (imageData !== "None" && imageData !== "") {
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('deleteImageButton').style.display = 'flex';
+            }
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('deleteImageButton').addEventListener('click', function() {
+        document.getElementById('imageFile').value = '';
+        document.getElementById('imageData').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('deleteImageButton').style.display = 'none';
+    });
+</script>
+
+<script>
+    document.getElementById("imageFile").addEventListener("change", function() {
+        // check if the file is selected
+        if (this.files && this.files[0]) {
+            var fileReader = new FileReader();
+            
+            fileReader.addEventListener("load", function(e) {
+                // set the image data to the hidden input
+                document.getElementById("imageData").value = e.target.result;
+                document.getElementById("imagePreview").src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('deleteImageButton').style.display = 'flex';
+            });
+            // convert the file to data url (base64)
+            fileReader.readAsDataURL(this.files[0]);
+        }
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#deleteReviewButton').click(function() {
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#form2').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: new FormData(form[0]),
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script>
+    // get the select element
+    const sortSelect = document.getElementById('sort-select-feedbacks');
+    
+    // get the feedbackContainer element
+    const feedbackContainer = document.getElementById('container-feedbacks');
+    
+    // listen for the change event on the select element
+    sortSelect.addEventListener('change', function() {
+        const selectedValue = this.value;
+        const feedbackElements = feedbackContainer.querySelectorAll('.col-md-4');
+        
+        // convert the NodeList to an array
+        const feedbacks = Array.from(feedbackElements);
+        // sort the feedbacks based on the selected value
+        switch (selectedValue) {
+            case 'date_desc':
+                sortByDateDesc(feedbacks);
+                break;
+            case 'date_asc':
+                sortByDateAsc(feedbacks);
+                break;
+            case 'score_high':
+                sortByScoreDesc(feedbacks);
+                break;
+            case 'score_low':
+                sortByScoreAsc(feedbacks);
+                break;
+            default:
+                break;
+        }
+        // clear the feedbackContainer
+        while (feedbackContainer.firstChild) {
+            feedbackContainer.removeChild(feedbackContainer.firstChild);
+        }
+        // append the sorted feedbacks to the feedbackContainer
+        feedbacks.forEach(function(feedback) {
+            feedbackContainer.appendChild(feedback);
+        });
+        
+    });
+    
+    // sort the feedbacks based on the date in descending order
+    function sortByDateDesc(feedbacks) {
+        feedbacks.sort(function(a, b) {
+            const dateA = new Date(a.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+            const dateB = new Date(b.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+            return dateB - dateA;
+        });
+    }
+    
+    // sort the feedbacks based on the date in ascending order
+    function sortByDateAsc(feedbacks) {
+        feedbacks.sort(function(a, b) {
+            const dateA = new Date(a.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+            const dateB = new Date(b.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+            return dateA - dateB;
+        });
+    }
+    
+    // sort the feedbacks based on the score in descending order
+    function sortByScoreDesc(feedbacks) {
+        feedbacks.sort(function(a, b) {
+            const scoreA = parseFloat(a.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+            const scoreB = parseFloat(b.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+            return scoreB - scoreA;
+        });
+    }
+    
+    // sort the feedbacks based on the score in ascending order
+    function sortByScoreAsc(feedbacks) {
+        feedbacks.sort(function(a, b) {
+            const scoreA = parseFloat(a.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+            const scoreB = parseFloat(b.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+            return scoreA - scoreB;
+        });
+    }
+</script>
+{% endblock %}

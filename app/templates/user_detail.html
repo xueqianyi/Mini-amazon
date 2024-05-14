@@ -1,0 +1,713 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user %}
+<style>
+    .stretch-card>.card {
+        width: 100%;
+        min-width: 100%
+    }
+
+    body {
+        background-color: #f9f9fa
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .center-flex {
+        display: flex;
+        justify-content: center;
+    }
+
+    .card-sub {
+        border: none;
+        -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+    }
+
+    .card-img-top {
+        width: 100%;
+        border-top-left-radius: calc(.25rem - 1px);
+        border-top-right-radius: calc(.25rem - 1px)
+    }
+
+    .card-block {
+        padding: 1.25rem;
+        background-color: #fff !important
+    }
+
+
+    .sortable-moves {
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px;
+    }
+
+    .sortable-moves {
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        min-height: 3.55556em;
+        padding-left: 7.11111em;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sortable-moves img {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px;
+    }
+
+    .orders-header h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        margin-left: 20px;
+    }
+
+    .orders-header hr {
+        border: none;
+        height: 1px;
+        background-color: #d3d3d3;
+        /* Grey color for the horizontal line */
+        margin-top: 5px;
+        margin-bottom: 0;
+        /* Adjust as needed to add space below the line */
+    }
+
+    .title-padding {
+        padding-top: 30px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .title-padding-2 {
+        padding-top: -20px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .text-product {
+        font-size: 10px;
+    }
+
+    .category-info {
+        color: #888;
+    }
+
+
+    a.no-decoration {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        outline: none;
+    }
+
+
+    a.no-decoration:focus .sortable-moves,
+    a.no-decoration:active .sortable-moves {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: box-shadow 0.3s;
+    }
+</style>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+{% if current_user.id == user.id %}
+<div class="title-padding orders-header">
+    <h1>My Orders</h1>
+    <hr>
+</div>
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-6">
+                <!-- Draggable Multiple List card start -->
+                <div class="card-block p-b-0">
+                    <div class="row">
+                        <div class="col-md-12" id="sortable">
+                            {% if orders %}
+
+                            {% for order in orders %}
+                            {% if loop.index <= 5 %} <a
+                                href="{{ url_for('orders.getUserOrders',user_id=current_user.id) }}"
+                                class="no-decoration" style="text-decoration: none; color: inherit;">
+                                <div class="sortable-moves">
+                                    <img class="text-product img-fluid p-absolute image-dim"
+                                        src="{{ order.img if order.img else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}"
+                                        alt="Product Image">
+                                    <h3>{{ order.product_name }}</h3>
+                                    <p>
+                                        <strong>
+                                            {% if order.status == 'Processing' %}
+                                                Status: Processing - Your order is being prepared from {{order.date}}.
+                                            {% elif order.status == 'Shipped' %}
+                                                Status: Shipped - Your order is on the way from {{order.shipDate}}.
+                                            {% elif order.status == 'Delivered' %}
+                                                Status: Delivered - Your order has arrived on {{ order.diliveryDate }}.
+                                            {% else %}
+                                                Status: Unknown - Please contact support.
+                                            {% endif %}
+                                        </strong>
+                                    </p>
+                                    <p class="category-info">Category: {{ order.category }}, Amount: {{ order.amount }},
+                                        Number: {{ order.number }}</p>
+                                    <p>{{ order.description}}</p>
+                                </div>
+                                </a>
+                                {% endif %}
+                                {% endfor %}
+                                {% if orders|length > 5 %}
+                                <a class="center-flex"
+                                    href="{{ url_for('orders.getUserOrders',user_id=current_user.id) }}">View
+                                    All
+                                    Orders</a>
+                                {% endif %}
+                                {% else %}
+                                <div class="col">
+                                    <p class="text-center">No orders found</p>
+                                </div>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endif %}
+
+<div class="title-padding-2 orders-header">
+    <br>
+    {% if current_user.id == user.id%}
+
+    <h1>My Profile</h1>
+    {% else %}
+    <h1>Profile</h1>
+    {% endif %}
+    <hr>
+</div>
+<div class="bootstrap-iso">
+    <br> <!--empty space-->
+    <br>
+    <div class="container">
+        <div class="row align-items-center my-5">
+            <div class="col-auto">
+                {% if user.image %}
+                <img src="{{ user.image }}" alt="User Avatar" class="rounded-circle"
+                    style="width: 100px; height: 100px;">
+                {% else %}
+                <img src="../static/default_avatar.png" alt="User Avatar" class="rounded-circle"
+                    style="width: 100px; height: 100px;">
+                {% endif %}
+            </div>
+
+            <div class="col">
+                <h2>{{ user.firstname }} {{ user.lastname }}, welcome to our Mini-Amazon! </h2>
+                 <p class="text-muted">{{ user.email }}</p>
+                 <p class="text-muted">Your balance: {{ user.balance }}</p>
+                {% if user.isSeller %}
+                <p class="text-muted">
+                    is a seller<br>
+                    average score:
+                    <span style="margin-right: 5px;">
+                        {% set score = avgScore | float %}
+                        {% set fullStars = score | int %}
+                        {% set hasHalfStar = score % 1 >= 0.5 %}
+                        {% for i in range(fullStars) %}
+                        <i class="fas fa-star"></i>
+                        {% endfor %}
+                        {% if hasHalfStar %}
+                        <i class="fas fa-star-half-alt"></i>
+                        {% endif %}
+                        {% for i in range(fullStars + hasHalfStar, 5) %}
+                        <i class="far fa-star"></i>
+                        {% endfor %}
+                    </span>
+                    ({{ avgScore }})<br>
+                </p>
+                {% else %}
+                <p class="text-muted">is not a seller</p>
+                {% endif %}
+                <a href="{{ url_for('users.edit_profile') }}" class="btn btn-primary">Edit Profile and Balance</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- reviews  -->
+    <div class="title-padding orders-header">
+        <h1>Reviews</h1>
+        <hr>
+    </div>
+    <div class="bootstrap-iso">
+        <br> <!--empty space-->
+        <div class="container my-4 border text-dark">
+            {% if user.isSeller %}
+
+            {% if current_user.is_authenticated and current_user.id != user.id%}
+            <h2 class="text-dark text-center my-1 py-3">My review to {{user.firstname}} {{user.lastname}}</h2>
+            <br> <!--empty space-->
+            
+            {% if showMyFeedback %} 
+            <!-- my review -->
+            <form id="form2" method="POST" action="{{ url_for('users.review_submit', seller_id=user.id) }}"
+            enctype="multipart/form-data" class="review-card" style="padding: 2.5rem ;margin-bottom: 1.5rem;">
+                {{ form.hidden_tag() }}
+
+                {% if not form.score.data %}
+                <p class="text-center">You have not reviewed this seller yet</p>
+                {% endif %}
+
+                <div class="form-group">
+                    {{ form.score.label(for="score") }}
+                    <!-- show stars -->
+                    <span class="stars" style="margin-right: 5px;">
+                    </span>
+                    {{ form.score(class="form-control", id="score") }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.content.label(for="content") }}
+                    {{ form.content(class="form-control", rows="3", id="content") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.image.label }}
+                    <input type="file" id="imageFile" accept="image/*" />
+                    {{ form.image(type="hidden", id="imageData") }}
+                </div>
+
+                <div style="align-items: center;">
+                    <img id="imagePreview" src="{{ form.image.data }}" alt="Image Preview" class="img-thumbnail" style="display: none; width: 100%; max-width: 600px; height: auto; flex-shrink: 0;">
+                </div>
+
+                <br>
+                <div style="display: flex; align-items: center;">
+                    {{ form.submit(type="submit", class="btn btn-primary") }}
+                    <button type="button" id="deleteImageButton" class="btn btn-danger" style="display: none; margin-left: 10px;">Delete Image</button>
+
+                    <button type="button" id="deleteReviewButton" class="btn btn-danger" style="display: none; margin-left: 10px;" 
+                    data-url="{{ url_for('users.review_delete', seller_id=user.id) }}">Delete Review</button>
+                </div>
+            </form>
+  
+            {% else %}
+
+            <div class="col">
+                <p class="text-center">You can not sumbit a feedback yet, since you haven't bought any thing from the seller.</p>
+            </div>
+            {% endif %} <!-- endif showMyFeedback -->
+
+
+            {% endif %} <!-- endif is_authenticated and not the same user -->
+            <br>
+
+
+            <!-- other reviews -->
+            <h2 class="text-dark text-center my-1 py-3">
+                Customer reviews to {{user.firstname}} {{user.lastname}}
+            </h2>
+
+            <div class="row" >
+                {% if feedbacksByOther %}
+                <select id="sort-select-feedbacksByOther" style="float: right; margin-right: 20px;">
+                    <option value="date_desc">Most Recent</option>
+                    <option value="date_asc">Oldest</option>
+                    <option value="score_high">Highest Score</option>
+                    <option value="score_low">Lowest Score</option>
+                </select>
+                <br>
+                <br>
+                <br>
+
+                <div id="container-feedbacksByOther">
+                    {% for feedback in feedbacksByOther %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 review-card" style="height: 350px; margin-bottom: 1.5rem;">
+                            <div class="card-body d-flex flex-column" style="padding: 1.25rem;">
+                                <div class="mb-3">
+                                    <!-- User Image and Info Wrapper -->
+                                    <a class="d-flex align-items-start" style="display: flex; align-items: center; text-decoration: none;" href="{{ url_for('users.user_detail', user_id=feedback.uid) }}">
+                                        <!-- User Image -->
+                                        {% if feedback.userImage %}
+                                        <img src="{{ feedback.userImage }}" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% else %}
+                                        <img src="../../static/default_avatar.png" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% endif %}
+                                        <!-- Text Info -->
+                                        <p class="card-text" style="margin-left: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Date: {{ feedback.date }}<br>
+                                            User: {{ feedback.userFirstname }} {{ feedback.userLastname }}<br>
+                                            Score:
+                                            <span class="stars" style="margin-right: 5px;">
+                                                {% set score = feedback.score | float %}
+                                                {% set fullStars = score | int %}
+                                                {% set hasHalfStar = score % 1 >= 0.5 %}
+                                                {% for i in range(fullStars) %}
+                                                <i class="fas fa-star"></i>
+                                                {% endfor %}
+                                                {% if hasHalfStar %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                                {% endif %}
+                                                {% for i in range(fullStars + hasHalfStar, 5) %}
+                                                <i class="far fa-star"></i>
+                                                {% endfor %}
+                                            </span>
+                                            ({{ feedback.score }})<br>
+                                        </p>
+                                    </a>
+
+                                    <!-- Content Card -->
+                                    <br>
+                                    <div class="card p-2"style="overflow-y: auto; max-height: 225px;">
+                                        <p class="card-text">{{ feedback.content }}</p>
+                                        {% if feedback.image %}
+                                        <img src="{{ feedback.image }}" alt="Feedback Image"
+                                            class="card-img-top mx-auto d-block" style="width: 60%; height: auto;">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div> <!-- end of container-feedbacksByOther -->
+                {% else %}
+                <br>
+                <div class="col">
+                    <p class="text-center">No feedbacks found</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% endif %} <!-- endif isSeller -->
+
+            <!-- recent reviews by this user -->
+            <h2 class="text-dark text-center my-1 py-3">Recent reviews by {{user.firstname}} {{user.lastname}} </h2>
+            <div class="row">
+                {% if feedbacksByThis %}
+                <select id="sort-select-feedbacksByThis" style="float: right; margin-right: 20px;">
+                    <option value="date_desc">Most Recent</option>
+                    <option value="date_asc">Oldest</option>
+                    <option value="score_high">Highest Score</option>
+                    <option value="score_low">Lowest Score</option>
+                </select>
+                <br>
+                <br>
+                <br>
+
+                <div id="container-feedbacksByThis">
+                    {% for feedback in feedbacksByThis %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 review-card" style="height: 350px; margin-bottom: 1.5rem;">
+                            <div class="card-body d-flex flex-column" style="padding: 1.25rem;">
+                                <div class="mb-3">
+                                    <!-- User Image and Info Wrapper -->
+                                    <a class="d-flex align-items-start" style="display: flex; align-items: center; text-decoration: none;"
+                                    href="{{ url_for('products.show_detailed_product', sellerId=feedback.sid, productId=feedback.pid) }}">
+                                        <!-- User Image -->
+                                        {% if feedback.productImage %}
+                                        <img src="{{ feedback.productImage }}" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% else %}
+                                        <img src="../../static/book.png" alt="User Avatar" class="mr-3" style="border-radius: 50%; width: 60px; height: 60px;">
+                                        {% endif %}
+                                        <!-- Text Info -->
+                                        <p class="card-text" style="margin-left: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Date: {{ feedback.date }}<br>
+                                            Product: {{ feedback.productName }}<br>
+                                            Seller: {{ feedback.userFirstname }} {{ feedback.userLastname }}<br>
+                                            Score:
+                                            <span class="stars" style="margin-right: 5px;">
+                                                {% set score = feedback.score | float %}
+                                                {% set fullStars = score | int %}
+                                                {% set hasHalfStar = score % 1 >= 0.5 %}
+                                                {% for i in range(fullStars) %}
+                                                <i class="fas fa-star"></i>
+                                                {% endfor %}
+                                                {% if hasHalfStar %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                                {% endif %}
+                                                {% for i in range(fullStars + hasHalfStar, 5) %}
+                                                <i class="far fa-star"></i>
+                                                {% endfor %}
+                                            </span>
+                                            ({{ feedback.score }})<br>
+                                        </p>
+                                    </a>
+
+                                    <!-- Content Card -->
+                                    <br>
+                                    <div class="card p-2"style="overflow-y: auto; max-height: 215px;">
+                                        <p class="card-text">{{ feedback.content }}</p>
+                                        {% if feedback.image %}
+                                        <img src="{{ feedback.image }}" alt="Feedback Image"
+                                            class="card-img-top mx-auto d-block" style="width: 60%; height: auto;">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div> <!-- end of container-feedbacksByThis -->
+                {% else %}
+                <br>
+                <div class="col">
+                    <p class="text-center">No feedbacks found</p>
+                </div>
+                {% endif %}
+
+        </div>
+    </div>
+    <!-- end of reviews -->
+
+
+</div>
+
+{% else %}
+
+<div class="container">
+    <div class="row align-items-center my-5">
+        <div class="col">
+            <h2>User not found</h2>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<!-- scripts for my review -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- show stars for score -->
+<script>
+    document.getElementById('score').addEventListener('input', function() {
+        let score = parseFloat(this.value);
+        if (score > 5) {
+            score = 5;
+            this.value = 5;
+        } else if (score < 0) {
+            score = 0;
+            this.value = 0;
+        }
+        const fullStars = Math.floor(score);
+        const hasHalfStar = score % 1 >= 0.5;
+        let starsHtml = '';
+        for (let i = 0; i < fullStars; i++) {
+          starsHtml += '<i class="fas fa-star"></i>';
+        }
+        if (hasHalfStar) {
+          starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        for (let i = fullStars + hasHalfStar; i < 5; i++) {
+          starsHtml += '<i class="far fa-star"></i>';
+        }
+        document.querySelector('.stars').innerHTML = starsHtml;
+      });
+</script>
+
+
+<!-- if review exists, show buttons-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var score = document.getElementById('score').value;
+        if (score !== "None" && score !== "") {
+            document.getElementById('score').dispatchEvent(new Event('input'));
+            document.getElementById('deleteReviewButton').style.display = 'flex';
+            var imageData = document.getElementById('imageData').value;
+            if (imageData !== "None" && imageData !== "") {
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('deleteImageButton').style.display = 'flex';
+            }
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('deleteImageButton').addEventListener('click', function() {
+        document.getElementById('imageFile').value = '';
+        document.getElementById('imageData').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('deleteImageButton').style.display = 'none';
+    });
+</script>
+
+<script>
+    document.getElementById("imageFile").addEventListener("change", function() {
+        // check if the file is selected
+        if (this.files && this.files[0]) {
+            var fileReader = new FileReader();
+            
+            fileReader.addEventListener("load", function(e) {
+                // set the image data to the hidden input
+                document.getElementById("imageData").value = e.target.result;
+                document.getElementById("imagePreview").src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('deleteImageButton').style.display = 'flex';
+            });
+            // convert the file to data url (base64)
+            fileReader.readAsDataURL(this.files[0]);
+        }
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#deleteReviewButton').click(function() {
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#form2').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: new FormData(form[0]),
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+
+// listen for the change event on the select element
+function applySortFeedbacks(sortSelectId, feedbackContainerId) {
+    const sortSelect = document.getElementById(sortSelectId);
+    const feedbackContainer = document.getElementById(feedbackContainerId);
+
+    sortSelect.addEventListener('change', function() {
+        const selectedValue = this.value;
+        const feedbackElements = feedbackContainer.querySelectorAll('.col-md-4');
+        const feedbacks = Array.from(feedbackElements);
+        switch (selectedValue) {
+            case 'date_desc':
+                sortByDateDesc(feedbacks);
+                break;
+            case 'date_asc':
+                sortByDateAsc(feedbacks);
+                break;
+            case 'score_high':
+                sortByScoreDesc(feedbacks);
+                break;
+            case 'score_low':
+                sortByScoreAsc(feedbacks);
+                break;
+            default:
+                break;
+        }
+
+        while (feedbackContainer.firstChild) {
+            feedbackContainer.removeChild(feedbackContainer.firstChild);
+        }
+
+        feedbacks.forEach(function(feedback) {
+            feedbackContainer.appendChild(feedback);
+        });
+    });
+}
+
+// sort the feedbacks based on the date in descending order
+function sortByDateDesc(feedbacks) {
+    feedbacks.sort(function(a, b) {
+        const dateA = new Date(a.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+        const dateB = new Date(b.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+        return dateB - dateA;
+    });
+}
+
+// sort the feedbacks based on the date in ascending order
+function sortByDateAsc(feedbacks) {
+    feedbacks.sort(function(a, b) {
+        const dateA = new Date(a.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+        const dateB = new Date(b.querySelector('.card-text').textContent.split('Date: ')[1].split('\n')[0]);
+        return dateA - dateB;
+    });
+}
+
+// sort the feedbacks based on the score in descending order
+function sortByScoreDesc(feedbacks) {
+    feedbacks.sort(function(a, b) {
+        const scoreA = parseFloat(a.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+        const scoreB = parseFloat(b.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+        return scoreB - scoreA;
+    });
+}
+
+// sort the feedbacks based on the score in ascending order
+function sortByScoreAsc(feedbacks) {
+    feedbacks.sort(function(a, b) {
+        const scoreA = parseFloat(a.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+        const scoreB = parseFloat(b.querySelector('.card-text').textContent.split('(')[1].split(')')[0]);
+        return scoreA - scoreB;
+    });
+}
+</script>
+
+<script>
+    applySortFeedbacks('sort-select-feedbacksByOther', 'container-feedbacksByOther');
+</script>
+
+<script>
+    applySortFeedbacks('sort-select-feedbacksByThis', 'container-feedbacksByThis');
+</script>
+{% endblock %}

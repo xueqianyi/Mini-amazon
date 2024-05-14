@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if user %}
+<style>
+    .stretch-card>.card {
+        width: 50%;
+        min-width: 50%
+    }
+
+    body {
+        background-color: #f9f9fa
+    }
+
+    .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto
+    }
+
+    @media (max-width:991.98px) {
+        .padding {
+            padding: 1.5rem
+        }
+    }
+
+    @media (max-width:767.98px) {
+        .padding {
+            padding: 1rem
+        }
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .center-flex {
+        display: flex;
+        justify-content: center;
+    }
+
+    .card-sub {
+        border: none;
+        -webkit-box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05)
+    }
+
+    .card-img-top {
+        width: 100%;
+        border-top-left-radius: calc(.25rem - 1px);
+        border-top-right-radius: calc(.25rem - 1px)
+    }
+
+    .card-block {
+        padding: 1.25rem;
+        background-color: #fff !important
+    }
+
+
+    .sortable-moves {
+        margin-bottom: 0;
+        -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 20px;
+        padding: 15px 0 15px 60px;
+    }
+
+    .sortable-moves {
+        line-height: 1.55556em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        min-height: 3.55556em;
+        padding-left: 7.11111em;
+        position: relative;
+        background-color: #fff;
+    }
+
+    .sortable-moves img {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 10px;
+        border-radius: 5px;
+        top: 15px;
+    }
+
+    .orders-header h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        margin-left: 20px;
+    }
+
+    .orders-header hr {
+        border: none;
+        height: 1px;
+        background-color: #d3d3d3;
+        /* Grey color for the horizontal line */
+        margin-top: 5px;
+        margin-bottom: 0;
+        /* Adjust as needed to add space below the line */
+    }
+
+    .title-padding {
+        padding-top: 30px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .title-padding-2 {
+        padding-top: -20px;
+        margin-bottom: -20px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .text-product {
+        font-size: 10px;
+    }
+
+    .category-info {
+        color: #888;
+    }
+
+
+    a.no-decoration {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        outline: none;
+    }
+
+
+    a.no-decoration:focus .sortable-moves,
+    a.no-decoration:active .sortable-moves {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: box-shadow 0.3s;
+    }
+
+
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        align-items: center;
+    }
+
+
+    .page-item {
+        margin-right: 5px;
+    }
+
+
+    .page-link {
+        padding: 5px 10px;
+        text-decoration: none;
+        color: black;
+        border-radius: 5px;
+        line-height: 20px;
+        font-size: 16px;
+    }
+
+
+    .page-item.active .page-link {
+        background-color: black;
+        color: white;
+    }
+</style>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div class="title-padding orders-header">
+    <h1>Your Orders</h1>
+    <hr>
+</div>
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-6">
+                <!-- Draggable Multiple List card start -->
+                <div class="card-block p-b-0">
+                    <div class="row">
+                        <div class="col-md-12" id="sortable">
+                            {% if orders %}
+                            {% for order in orders %}
+                            <a href="{{ url_for('orders.getOrderDetail',user_id=current_user.id, order_id=order.order_key) }}"
+                                class="no-decoration" style="text-decoration: none; color: inherit;">
+                                <div class="sortable-moves" style="">
+                                    <img class="text-product img-fluid p-absolute image-dim"
+                                        src="{{ order.img if order.img else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}"
+                                        alt="Product Image">
+                                    <h3>{{ order.product_name }}</h3>
+                                    <p>
+                                        <strong>
+                                            {% if order.status == 'Processing' %}
+                                            Status: Processing - Your item is being prepared.
+                                            {% elif order.status == 'Shipped' %}
+                                            Status: Shipped - Your item is on the way.
+                                            {% elif order.status == 'Delivered' %}
+                                            Status: Delivered - Your item has arrived.
+                                            {% else %}
+                                            Status: Unknown - Please contact support.
+                                            {% endif %}
+                                        </strong>
+                                    </p>
+                                    <p class="category-info">Category: {{ order.category }}, Amount: {{ order.amount }},
+                                        Number: {{ order.number }}</p>
+                                    <p>{{ order.description}}</p>
+                                </div>
+                            </a>
+
+                            {% endfor %}
+
+
+                            <!-- Pagination Controls -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    {% if prev_num %}
+                                    <li class="page-item"><a class="page-link"
+                                            href="{{ url_for('orders.getUserOrders', user_id=user.id, page=prev_num) }}">Previous</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                    {% endif %}
+
+                                    {% for page_num in range(1, pagination.total_pages + 1) %}
+                                    {% if page_num == pagination.page %}
+                                    <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link"
+                                            href="{{ url_for('orders.getUserOrders', user_id=user.id, page=page_num) }}">{{
+                                            page_num }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if next_num %}
+                                    <li class="page-item"><a class="page-link"
+                                            href="{{ url_for('orders.getUserOrders', user_id=user.id, page=next_num) }}">Next</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+
+
+
+
+
+                            {% else %}
+                            <div class="col">
+                                <p class="text-center">No orders found</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+{% else %}
+
+<div class="container">
+    <div class="row align-items-center my-5">
+        <div class="col">
+            <h2>User not found</h2>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

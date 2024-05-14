@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="order-history bootstrap-iso">
+    <h1>Order History</h1>
+    <div class="order-list container">
+        {% for key in items %}
+        <div class="order">
+            <div class="order-header">
+                {% if items[key] | length > 0 %}
+                <div>Order ID: {{items[key][0].orderkey}}</div>
+                <span>Order's Date: {{items[key][0].date}}</span>
+                {% endif %}
+            </div>
+            <div class="order-body">
+                {% if items[key] | length > 0 %}
+                <div>Users' Address: {{items[key][0].address}}</div>
+                {% endif %}
+                <div class="items">
+                    {% for item in items[key] %}
+                    <div class="item {{ 'fulfilled' if item.fulfilled else 'pending' }}">
+                        <div class="right">
+                            <div>Total amount of items: {{ item.amount }}</div>
+                            <div>Total number of items: {{ item.number }}</div>
+                            <div class="fulfilment-status">Fulfilment Status: {{ item.fulfilment }}</div>
+                            {% if item.fulfilment == "Processing" %}
+                            <button class="update-status btn btn-warning" data-url="{{ url_for('sellers.update_fulfilment', orderkey=item.orderkey, pid=item.pid, new_status='Shipped') }}">Mark as Shipped</button>
+                            {% elif item.fulfilment == "Shipped" %}
+                            <button class="update-status btn btn-success" data-url="{{ url_for('sellers.update_fulfilment', orderkey=item.orderkey, pid=item.pid, new_status='Delivered') }}">Mark as Fulfilled</button>
+                            {% endif %}
+                        </div>
+                        <div class="order-main">
+                            <div>Product Name: {{ item.productname }}</div>
+                            <div>
+                                <img src="{{item.image if item.image else 'https://m.media-amazon.com/images/I/81yGvW62D2L._AC_SY240_.jpg' }}"></img>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(() => {
+        $('.order .item').each((i, el) => {
+            const status = $(el).find('.fulfilment-status');
+            const button = $(el).find('.update-status');
+            button.on('click', e => {
+                const btn = $(e.currentTarget);
+                const url = btn.data('url');
+                $.post(url, {}, (response) => {
+                    console.log(response);
+                    if (response.new_status === 'Delivered') {
+                        button.remove();
+                    } else {
+                        btn.text('Mark as Fulfilled');
+                        btn.removeClass('btn-warning').addClass('btn-success');
+                        btn.data('url', url.replace('Shipped', 'Delivered'));
+                    }
+                    status.text('Fulfilment Status: ' + response.new_status);
+                }, 'json');
+            });
+        });
+    })
+</script>
+    
+<style>
+    .order-history {
+        padding: 16px;
+    }
+    .order-list {
+        margin-top: 20px;
+    }
+    .order {
+        background: #f9f9f9;
+        border: 1px solid #e1e1e1;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .order-header {
+        background: #e7e7e7;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    .order-body > div {
+        margin-bottom: 4px;
+    }
+    .order-main {
+        overflow: hidden;
+    }
+    .right {
+        height: 120px;
+        float: right;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .items .item {
+        background: #fff;
+        padding: 8px;
+        border: 1px solid #ddd;
+        margin-bottom: 8px;
+    }
+    .fulfilled {
+        background: #e0f8e0;
+    }
+    .pending {
+        background: #f8e0e0;
+    }
+    .mark-fulfilled {
+        background: #4CAF50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+    }
+    .order-main img {
+        width: 120px;
+        height: 120px;
+    }
+</style>
+
+{% endblock %}
+
+
